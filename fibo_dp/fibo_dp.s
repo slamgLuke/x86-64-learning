@@ -1,6 +1,6 @@
 .section .data
-arr: .zero 8*5
-n: .quad 5
+arr: .zero 8*20
+n: .quad 20
 
 fm_ld: .asciz "%ld\n"
 fm_lp: .asciz "["
@@ -18,10 +18,8 @@ fm_empty: .asciz ""
 
 _start:
     call fibo_dp
-    # call print_array
+    call print_array
     jmp _end
-
-
 
 
 _end:
@@ -39,7 +37,7 @@ fibo_dp:
     movq $1, arr+8(%rip)
 
     movq $2, %r8
-
+    movq n(%rip), %rsi
 fibo_dp_for:
     cmp %rsi, %r8
     jge fibo_dp_endfor
@@ -62,6 +60,7 @@ fibo_dp_endfor:
     ret
 
 
+# 64-bit ints
 print_array:
     # prep stack
     pushq %rbp
@@ -84,29 +83,29 @@ print_array:
     movq n(%rip), %rdi
     dec %rdi
     movq %rdi, -8(%rbp)
-for1:
+print_array_for:
     cmp -8(%rbp), %r12 # break if (i >= n-1)
-    jge endfor1
+    jge print_array_endfor
     
     # printf(fm_list, arr[i], fm_comma);
     lea fm_list(%rip), %rdi
-    movq (, %r12, 8), %rsi
+    movq arr(, %r12, 8), %rsi
     lea fm_comma(%rip), %rdx
     call printf
 
     inc %r12
-    jmp for1 
-endfor1:
+    jmp print_array_for
+print_array_endfor:
 # =============================
 
     # print last element
     lea fm_list(%rip), %rdi
-    movq (, %r12, 8), %rsi
+    movq arr(, %r12, 8), %rsi
     lea fm_rp(%rip), %rdx
     call printf
 
     # restore stack
-    add $8*3, %rsp
+    addq $8*3, %rsp
     popq %r12
     popq %rbp
     ret
