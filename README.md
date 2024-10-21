@@ -17,12 +17,12 @@ Even the most barebone languages like C are already pretty high level compared t
 
 And, of course, don't even think about using assembly for anything that is not small-scale (kudos to you if you manage to do it).
 
-Still, learning to program in assembly is great for a bunch of obvious reasons:
+**Still, learning to program in assembly is great for a bunch of obvious reasons:**
 - You will learn how a computer actually works at the hardware level.
 - You will understand how to make code faster and more memory efficient.
-- You will be a better C programmer.
+- You will be a better C programmer (duh!).
 
-And some not so obvious reasons:
+**And some not so obvious reasons:**
 - You will never fear pointers again.
 - A mere segmentation fault will not scare you anymore.
 - Learning to debug what is essentially slightly more readable binary means you can debug anything.
@@ -70,13 +70,13 @@ And yes, hello_world is relatively easy, but it's not a 1 because you need to kn
 
 Learning assembly is hard, but very rewarding. Initially, you might feel like you are not making any progress, and you might get stuck with segmentation faults that just don't make sense. But don't worry, it gets better.
 
-Here's a few tips to start:
+**Here's a few tips to start:**
 - First of all, get used to assembly in general. It might be easier to start with a simpler architecture like ARM or MIPS with an emulator like [cpulator](https://cpulator.01xz.net/?sys=arm-de1soc), since using assembly on the OS is a lot trickier.
 - Learn about data processing, memory access, and branching. These are the basics of any assembly language.
 - Then, learn how to translate simple C code to assembly. If else statements, for, while and do while loops.
 - Finally, learn how to use the stack, and how to call functions. This is the most important part of programming in assembly.
 
-Once you're done with the basics, here's a few tips to get good at x86_64:
+**Once you're done with the basics, here's a few tips to get good at x86_64:**
 - Learn about the register calling convention. If you can standardize how you use registers for your own functions, you will have a much easier time programming.
 - The stack is your friend. Learn how to use it properly, and you'll never worry about losing your precious data between function calls. It also helps a lot with the tip above.
 - Another tip for using the stack, is to draw a little diagram in your comments. Knowing which value has which offset will save you a lot of headaches. For example:
@@ -94,7 +94,7 @@ Once you're done with the basics, here's a few tips to get good at x86_64:
 - GDB is your best friend. Learn how to use it, and how to finally find what the heck is causing that seg fault.
 - If you are not sure of how to make something in assembly, try to make it in C first. You can then either try implementing it based on that code, or you can compile it with the -S flag to get the gcc assembly output.
 
-And, some of the pitfalls that have scarred me the most:
+**And, some of the pitfalls that have scarred me the most:**
 - Most registers are volatile, and you **should not trust them** to keep their values between function calls. Learn which registers are safe to use.
 - Division and multiplication use the **RDX** and **RAX** registers for a combined 16-byte integer, and you should clear them before using them.
 - Many functions expect the stack pointer to be 16-byte aligned, and it might crash if it's not a multiple of 16.
