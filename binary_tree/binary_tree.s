@@ -18,19 +18,21 @@
 .section .rodata
 sizeof_node: .int 17
 
-fm_c:       .asciz "%c\n"
+fm_c:       .asciz "|%c|\n"
 fm_lp:      .asciz "["
 fm_rp:      .asciz "]\n"
 fm_list:    .asciz "%c%s"
 fm_comma:   .asciz ", "
+fm_empty:   .asciz ""
 
-fm_node:    .asciz "Node { left: %p, right: %p, data: %c }\n"
+fm_node:    .asciz "Node: %p { left: %p, right: %p, data: %c }\n"
+fm_depth:   .asciz "    "
 
 
 
 .section .data
-size: .int 11
 arr: .byte 'F', 'B', 'G', 'A', 'Q', 'I', 'C', 'Z', 'K', 'E', 'H'
+size: .int 11
 
 
 .section .text
@@ -39,62 +41,43 @@ arr: .byte 'F', 'B', 'G', 'A', 'Q', 'I', 'C', 'Z', 'K', 'E', 'H'
 _start:
     movq %rsp, %rbp
 
+    # print_array(arr, size)
     leaq arr(%rip), %rdi
     movl size(%rip), %esi
     call print_array
 
+    # root = NULL
+    xorq %rbx, %rbx
 
-    # malloc root
-    movl sizeof_node(%rip), %edi
-    call malloc
+    # for (i = 0; i < size; i++) bt_insert(root, arr[i])
+    xorq %r12, %r12 # i = 0
+for1:
+    cmpl size(%rip), %r12d
+    jge endfor1
+
+    # bt_insert(root, arr[i])
+    movq %rbx, %rdi
+    movb arr(, %r12, 1), %sil
+    call bt_insert
     movq %rax, %rbx
 
-    # root->data = {NULL, NULL, arr[0]}
-    movq $0, 0(%rbx)
-    movq $0, 8(%rbx)
+    incq %r12
+    jmp for1
+endfor1:
+
+    # bt_inorder_debug(root)
     movq %rbx, %rdi
-    addq $16, %rdi
-    movb arr(%rip), %al
-    movb %al, (%rdi)
-
-    # printf(fm_node, root->left, root->right, root->data)
-    leaq fm_node(%rip), %rdi
-    movq 0(%rbx), %rsi
-    movq 8(%rbx), %rdx
-    movb 16(%rbx), %cl
-    xorq %rax, %rax
-    call printf
-
-    # btree_insert(root, arr[1])
-    movq %rbx, %rdi
-    movb arr+1(%rip), %sil
-    call bt_insert
-
-    # printf(fm_node, rax->left, rax->right, rax->data)
-    leaq fm_node(%rip), %rdi
-    movq 0(%rax), %rsi
-    movq 8(%rax), %rdx
-    movb 16(%rax), %cl
-    xorq %rax, %rax
-    call printf
-
-    # printf(fm_node, root->left, root->right, root->data)
-    leaq fm_node(%rip), %rdi
-    movq 0(%rbx), %rsi
-    movq 8(%rbx), %rdx
-    movb 16(%rbx), %cl
-    xorq %rax, %rax
-    call printf
+    xorl %esi, %esi
+    call bt_pretty_print
 
     # free root
     movq %rbx, %rdi
     call free
-
-
 _end:
     movq $60, %rax
     xorq %rdi, %rdi
     syscall
+
 
 
 # node* btree_insert(node *root, char data)
@@ -103,41 +86,152 @@ bt_insert:
     movq %rsp, %rbp
     subq $24, %rsp
 
-    movq $0, %rax
-    # if root == NULL, return
-    cmpq $0, %rdi
-    je _bt_insert_end
-    # if root->data == data, return
-    movb 16(%rdi), %al
-    cmpb %sil, %al
-    je _bt_insert_end
-
     # save root, data on stack
     movq %rdi, -8(%rbp)
     movb %sil, -16(%rbp)
 
+    # if root == NULL, malloc new_node and return
+    # else keep going down recursively
+    cmpq $0, %rdi
+    jne _bt_insert_recursion
+
     # malloc new_node
     movl sizeof_node(%rip), %edi
     call malloc
-    # init new_node
+    # init node { NULL, NULL, data }
     movq $0, 0(%rax)
     movq $0, 8(%rax)
-    movb -16(%rbp), %dil 
+    movb -16(%rbp), %dil
     movb %dil, 16(%rax)
+    # return new_node
+    jmp _bt_insert_end
 
-    movq -8(%rbp), %rdi
-    # if root->data > data, root->left = new_node
+_bt_insert_recursion:
+    # if root->data == data, return
+    # else if data < root->left, root->left = new_node
     # else root->right = new_node
-    cmpb %dil, %al
-    jg _bt_insert_left
+    movb 16(%rdi), %al
+    cmpb %sil, %al
+    je _bt_insert_end # if root->data == data, return
+    jl _bt_insert_left
 _bt_insert_right:
-    movq %rax, 0(%rdi)
+    # new_node = bt_insert(root->right, data)
+    movq -8(%rbp), %rdi
+    movq 8(%rdi), %rdi # root->right
+    movb -16(%rbp), %sil
+    call bt_insert
+    # root->right = new_node
+    movq -8(%rbp), %rdi
+    movq %rax, 8(%rdi)
+    # return root
+    movq -8(%rbp), %rax
     jmp _bt_insert_end
 _bt_insert_left:
-    movq %rax, 8(%rdi)
-
+    # new_node = bt_insert(root->left, data)
+    movq -8(%rbp), %rdi
+    movq (%rdi), %rdi # root->left
+    movb -16(%rbp), %sil
+    call bt_insert
+    # root->left = new_node
+    movq -8(%rbp), %rdi
+    movq %rax, (%rdi)
+    # return root
+    movq -8(%rbp), %rax
 _bt_insert_end:
     movq %rbp, %rsp
+    popq %rbp
+    ret
+
+
+
+# void bt_inorder_debug(node *root)
+bt_inorder_debug:
+    pushq %rbx
+    subq $8, %rsp
+    # if root == NULL, return
+    cmpq $0, %rdi
+    je _bt_inorder_debug_end
+
+    movq %rdi, %rbx # save root on callee-saved register
+
+    # bt_inorder_debug(root->left)
+    movq 0(%rbx), %rdi
+    call bt_inorder_debug
+
+    # printf(fm_node, root, root->left, root->right, root->data)
+    leaq fm_node(%rip), %rdi
+    movq %rbx, %rsi
+    movq 0(%rbx), %rdx
+    movq 8(%rbx), %rcx
+    movb 16(%rbx), %r8b
+    xorq %rax, %rax
+    call printf
+
+    # bt_inorder_debug(root->right)
+    movq 8(%rbx), %rdi
+    call bt_inorder_debug
+_bt_inorder_debug_end:
+    addq $8, %rsp
+    popq %rbx
+    ret
+
+
+
+# void bt_pretty_print(node *root, int depth)
+bt_pretty_print:
+    pushq %rbp
+    pushq %r12
+    movq %rsp, %rbp
+    subq $16, %rsp
+    # if root == NULL, puts(fm_empty) and return
+    cmpq $0, %rdi
+    jne _bt_pretty_print_continue
+    leaq fm_empty(%rip), %rdi
+    call puts
+    jmp _bt_pretty_print_ret
+
+_bt_pretty_print_continue:
+    # =================
+    # rbp - 8  = root
+    # rbp - 12 = depth
+    # =================
+    movq %rdi, -8(%rbp)
+    movl %esi, -12(%rbp)
+
+    # bt_pretty_print(root->left, depth+1)
+    movq 0(%rdi), %rdi
+    incl %esi
+    call bt_pretty_print
+
+    # for (i = 0; i < depth; i++) printf(fm_depth)
+    xorl %r12d, %r12d
+_bt_pretty_print_for:
+    cmpl -12(%rbp), %r12d
+    jge _bt_pretty_print_endfor
+    leaq fm_depth(%rip), %rdi
+    xorq %rax, %rax
+    call printf
+    incl %r12d
+    jmp _bt_pretty_print_for
+_bt_pretty_print_endfor:
+
+    # printf(fm_c, root->data)
+    leaq fm_c(%rip), %rdi
+    movq -8(%rbp), %rsi
+    movb 16(%rsi), %sil
+    xorq %rax, %rax
+    call printf
+
+    # bt_pretty_print(root->right, depth+1)
+    movq -8(%rbp), %rdi
+    movq 8(%rdi), %rdi
+    movl -12(%rbp), %esi
+    incl %esi
+    call bt_pretty_print
+
+_bt_pretty_print_ret:
+    movq %rbp, %rsp
+    popq %r12
     popq %rbp
     ret
 
