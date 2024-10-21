@@ -2,7 +2,7 @@
 
 This is the repo of someone who has managed to conquer the basics of x86_64 assembly without any tutorials or guides, just pure willpower and insanity.
 
-In this github repo I have collected many small algorithm projects over time that have helped me learn to program in x86_64 assembly in Linux, ranging from sorting algorithms, to simple data structures, and even LeetCode problems.
+In this github repo I have collected many small algorithm projects over time that have helped me learn to program in x86_64 assembly in Linux, ranging from sorting algorithms, to simple data structures, and even LeetCode problems solved in assembly. I'll try to comment and explain as much as I can. But still, **this is not a tutorial**. You should try to make these projects on your own, and maybe come here for inspiration or help.
 
 There is also some shared wisdom for those interested in learning as well. I hope to make this repo useful not just for me, but for anyone who is just as crazy as I am.
 
@@ -53,7 +53,7 @@ Still, I'm not here to argue about which is my favourite flavour of 0s and 1s. Y
 
 ## About the projects
 
-Here are the projects I have collected in this repo, with a ranking of difficulty:
+Here are some of the projects I have collected in this repo, with a ranking of difficulty:
 
 | Project | Description | Difficulty |
 | --- | --- | --- |
@@ -62,12 +62,13 @@ Here are the projects I have collected in this repo, with a ranking of difficult
 | fibo_dp | A fibonacci function with dynamic programming. | 3 |
 | quicksort | A simple quicksort with pivot as last element. | 4 |
 | mergesort | The CLRS version of mergesort. | 6 |
-| LC two_sum | The LeetCode problem 1. | 4 |
-| LC merge_two_lists | The LeetCode problem 21. | 4 |
+| LC merge_two_ordered_lists | LeetCode problem 21 | 4 |
 
 Mind that this difficulties are relative to someone who knows the basics of assembly. They might seem harder for most, and easier for a few.
 
 And yes, hello_world is relatively easy, but it's not a 1 because you need to know about the .data segment and how to use syscalls. Also, **nothing is easy in assembly!!**
+
+I will be adding more projects as I go, and I will try to make them more challenging as I learn more about assembly. I will also try to make them more interesting, and maybe even useful.
 
 
 ## For those who want to learn/improve
