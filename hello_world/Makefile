@@ -1,0 +1,17 @@
+SRC=hello_world.s
+OBJ=$(SRC:.s=.o)
+BIN=$(SRC:.s=)
+ASFLAGS=-g
+CFLAGS=-g -no-pie -nostartfiles
+
+all:
+	as $(ASFLAGS) -o $(OBJ) $(SRC)
+	gcc $(CFLAGS) -o $(BIN) $(OBJ)
+
+clean:
+	rm -f $(OBJ) $(BIN)
+
+run: all
+	./$(BIN)
+
+.PHONY: all clean run
