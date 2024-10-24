@@ -4,9 +4,9 @@ This is the repo of someone who has managed to conquer the basics of x86_64 asse
 
 I have collected different small projects over time that I have made in order to learn to program in x86_64 assembly in Linux, ranging from sorting algorithms, to simple data structures. **Check out the `algoritms` and the `data_structures` folder**.
 
-Finally, as a true test of my assembly skills, I've tackled several LeetCode problems using in-line assemby in C (there isn't actually pure assembly a an option in LeetCode). **Check out the `leetcode` folder**.
-
 There is quite a bit of shared wisdom for those interested in learning as well, **head to the `basics_and_not_so_basics` folder** if you want to learn with some guided and thoroughly explained x86_64 code.
+
+Finally, as a true test of my assembly skills, I've tackled several LeetCode problems using in-line assemby in C (there isn't actually pure assembly a an option in LeetCode). **Check out the `leetcode` folder**.
 
 ## Why bother?
 
