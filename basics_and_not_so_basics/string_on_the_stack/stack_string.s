@@ -1,5 +1,5 @@
 # No data section here!
-# We'll be only using the stack
+# We'll be only using the stack to manually load and print strings
 
 .section .text
 .globl _start
@@ -10,6 +10,7 @@ _start:
     subq $48, %rsp
 
     # x86_64 uses little-endian
+    # for example:
     # addr: 0x00 points to the lower byte of 0x00-0x07
     # addr: 0x07 points to the higher byte of 0x00-0x07
     # addr: 0x08 points to the lower byte of 0x08-0x0f
@@ -40,14 +41,14 @@ _start:
 
 
 
-    # you can prefix a string by using a smaller address
+    # you can prefix a string by using an address that is lower than the string beginning
     movq $0x203a66746e697270, %rax  # "printf: "
     # adding as a prefix to the alphabet string
     movq %rax, -40(%rbp) 
 
 
     # also try iterating over the string
-    # since the memory is byte-addressable, we can iterate over the string byte by byte
+    # since memory is byte-addressable, we can iterate over the string byte by byte
 
     # uppercasing all the letters with a simple do-while loop
     leaq -32(%rbp), %rdi # start
@@ -70,7 +71,7 @@ uppercase:
 
     # Finally, for a more complex example, let's use multiple strings in the same stack
     # Note: im using python to generate the immediate values
-    # eight-byte-str.encode()[::-1].hex()
+    #  >> 'my8Bytes'.encode()[::-1].hex()
 
     # We want to make the following strings:
 
@@ -82,7 +83,6 @@ uppercase:
 
     # And then finally, we'll print them all using printf!!!
     # printf(main_str, str_1, str_2, str_3, str_4);
-
 
     # let's allocate new space in the stack
     pushq %rbp
@@ -125,7 +125,7 @@ uppercase:
     movb $0x00, -86(%rbp) # '\0'
 
     # printf(main_str, str_1, str_2, str_3, str_4);
-    # remember that lowest address of each string is the first char
+    # remember that lowest address of each string stores the first char
     leaq -48(%rbp), %rdi
     leaq -56(%rbp), %rsi
     leaq -64(%rbp), %rdx
@@ -141,8 +141,8 @@ uppercase:
 
 
     # Now we know how to use strings only using the stack
-    # This can be useful when we don't have access to the data section
-    # And we also did learn a lot about byte addressing in the process
+    # This can be useful when we don't have access to the data section. I use it, for example, when solving LeetCode problems with inline assembly.
+    # And we also did get to learn a lot about byte addressing in the process
 
     # However, most of the time, it's better to use the data section for pre-defined strings
     # and only use the stack for temporary variables
