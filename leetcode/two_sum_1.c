@@ -1,5 +1,6 @@
 // This one was actually made following Low Level Learning's video
 // https://www.youtube.com/watch?v=lALPErFlfNQ
+// ... the video that inspired me to solve leetcode problems in assembly
 
 /**
  * Note: The returned array must be malloced, assume caller calls free().
@@ -50,5 +51,5 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
     pop rbx;\n\
     ret;\n\
     .att_syntax;" : :);
-    return NULL;
+    return (int*)0;
 }
