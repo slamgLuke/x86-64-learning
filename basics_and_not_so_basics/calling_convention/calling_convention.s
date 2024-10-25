@@ -48,18 +48,17 @@ _start:
     call print_ret
 
     # function_with_10_args(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    movl $1, %edi
-    movl $2, %esi
-    movl $3, %edx
-    movl $4, %ecx
-    movl $5, %r8d
-    movl $6, %r9d
-    # make space in the stack for the remaining args
     movq %rsp, %rbp
     pushq $10
     pushq $9
     pushq $8
     pushq $7
+    movl $6, %r9d
+    movl $5, %r8d
+    movl $4, %ecx
+    movl $3, %edx
+    movl $2, %esi
+    movl $1, %edi
     call function_with_10_args
     # we have to restore the stack after the call
     movq %rbp, %rsp
