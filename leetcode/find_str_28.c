@@ -1,4 +1,5 @@
 int strStr(char* haystack, char* needle) {
+    int screw_you_leetcode;
     __asm__("\
         movl $-1, %%eax;\n\
         xorq %%r8, %%r8;\n\
@@ -31,5 +32,5 @@ int strStr(char* haystack, char* needle) {
         jmp for1%=;\n\
         endfor1%=:\n\
         ret;" : : );
-    return 0;
+    return screw_you_leetcode;
 }
