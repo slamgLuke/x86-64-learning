@@ -52,7 +52,7 @@ struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2) {
         rbp - 8  = list1
         rbp - 16 = list2
     */
-
+    struct ListNode* screw_you_leetcode;
     __asm__ (
     "movq %%rdi, %%rdx;\n"
     "movq %%rsi, %%rcx;\n"
@@ -117,5 +117,5 @@ struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2) {
     "movq %%rdi, %%rax;\n"
     "ret" : : );
 
-    return NULL;
+    return screw_you_leetcode;
 }
