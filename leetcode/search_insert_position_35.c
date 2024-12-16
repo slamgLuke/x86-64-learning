@@ -8,6 +8,7 @@ int searchInsert(int* nums, int numsSize, int target) {
         return i;
     */
 
+    int screw_you_leetcode;
     __asm__("\
         pushq %%rbp;\n\
         movq %%rsp, %%rbp;\n\
@@ -28,5 +29,5 @@ int searchInsert(int* nums, int numsSize, int target) {
         movq %%rbp, %%rsp;\n\
         popq %%rbp;\n\
         ret;": : );
-    return -1;
+    return screw_you_leetcode;
 }
