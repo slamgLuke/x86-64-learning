@@ -6,6 +6,7 @@
  * Note: The returned array must be malloced, assume caller calls free().
  */
 int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    int* screw_you_leetcode;
     __asm__(".intel_syntax noprefix;\n\
     push rbx;\n\
     sub rsp, 0x40;\n\
@@ -51,5 +52,5 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
     pop rbx;\n\
     ret;\n\
     .att_syntax;" : :);
-    return (int*)0;
+    return screw_you_leetcode;
 }
