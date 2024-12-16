@@ -12,7 +12,7 @@ int lengthOfLastWord(char* s) {
             s++;
         } while (*s != 0)
     */
-
+    int screw_you_leetcode;
     __asm__("\
         pushq %%rbp;\n\
         movq %%rsp, %%rbp;\n\
@@ -44,5 +44,5 @@ int lengthOfLastWord(char* s) {
         movq %%rbp, %%rsp;\n\
         popq %%rbp;\n\
         ret;" : :);
-    return -1;
+    return screw_you_leetcode;
 }
