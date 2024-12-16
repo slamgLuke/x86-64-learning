@@ -1,6 +1,6 @@
 int strStr(char* haystack, char* needle) {
     int screw_you_leetcode;
-    __asm__("\
+    __asm__ volatile ("\
         movl $-1, %%eax;\n\
         xorq %%r8, %%r8;\n\
         \
@@ -30,7 +30,11 @@ int strStr(char* haystack, char* needle) {
         \
         incq %%r8;\n\
         jmp for1%=;\n\
-        endfor1%=:\n\
-        ret;" : : );
+        endfor1%=:\n"
+        : "=a" (screw_you_leetcode)
+        : "D" (haystack),
+          "S" (needle)
+        : "r8", "r9", "r10", "cl", "dl" // clobbered regs
+    );
     return screw_you_leetcode;
 }
