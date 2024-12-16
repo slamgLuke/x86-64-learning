@@ -23,7 +23,7 @@ int* plusOne(int* digits, int digitsSize, int* returnSize) {
         c = 1 - c;
         rax += c << 2;
     */
-
+    int *screw_you_leetcode;
     __asm__("\
         pushq %%rbp;\n\
         movq %%rsp, %%rbp;\n\
@@ -81,5 +81,5 @@ int* plusOne(int* digits, int digitsSize, int* returnSize) {
         movq %%rbp, %%rsp;\n\
         popq %%rbp;\n\
         ret;" : :);
-    return (int*)0;
+    return screw_you_leetcode;
 }
