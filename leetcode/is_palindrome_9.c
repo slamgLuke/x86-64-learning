@@ -1,6 +1,7 @@
 #include <stdbool.h>
 
 bool isPalindrome(int x) {
+    bool screw_you_leetcode;
     __asm__("\
     pushq %%rbp;\n\
     movq %%rsp, %%rbp;\n\
@@ -44,5 +45,5 @@ return%=: ;\n\
     popq %%rbp;\n\
     ret;" : :);
 
-    return true;
+    return screw_you_leetcode;
 }
